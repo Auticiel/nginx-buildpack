@@ -9,9 +9,9 @@
 # Once the dyno has is 'up' you can open your browser and navigate
 # this dyno's directory structure to download the nginx binary.
 
-NGINX_VERSION=${NGINX_VERSION-1.11.3}
-PCRE_VERSION=${PCRE_VERSION-8.39}
-ZLIB_VERSION=${ZLIB_VERSION-1.2.8}
+NGINX_VERSION=${NGINX_VERSION-1.12.2}
+PCRE_VERSION=${PCRE_VERSION-8.41}
+ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz
