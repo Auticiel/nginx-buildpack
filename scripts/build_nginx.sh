@@ -12,10 +12,14 @@
 NGINX_VERSION=${NGINX_VERSION-1.15.6}
 PCRE_VERSION=${PCRE_VERSION-8.42}
 ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
+SET_MISC_VERSION=${SET_MISC_VERSION-0.32}
+NGX_DEVEL_KIT_VERSION=${NGX_DEVEL_KIT_VERSION-0.2.19}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz
 zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+set_misc_tarball_url=https://github.com/openresty/set-misc-nginx-module/archive/v${SET_MISC_VERSION}.tar.gz
+ngx_devel_kit_url=https://github.com/simpl/ngx_devel_kit/archive/v${NGX_DEVEL_KIT_VERSION}.tar.gz
 
 temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
@@ -35,6 +39,12 @@ echo "Downloading $pcre_tarball_url"
 echo "Downloading $zlib_url"
 (cd nginx-${NGINX_VERSION} && curl -L $zlib_url | tar xvz )
 
+echo "Downloading $set_misc_tarball_url"
+(cd nginx-${NGINX_VERSION} && curl -L $set_misc_tarball_url | tar xvz )
+
+echo "Downloading $ngx_devel_kit_url"
+(cd nginx-${NGINX_VERSION} && curl -L $ngx_devel_kit_url | tar xvz )
+
 (
   cd nginx-${NGINX_VERSION}
   ./configure \
@@ -44,7 +54,9 @@ echo "Downloading $zlib_url"
     --with-http_gzip_static_module \
     --with-http_v2_module \
     --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
-    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
+    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed' \
+    --add-module=ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
+    --add-module=set-misc-nginx-module-${SET_MISC_VERSION}
 
   make install
 )
